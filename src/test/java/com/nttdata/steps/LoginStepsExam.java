@@ -10,12 +10,6 @@ import org.openqa.selenium.NoSuchElementException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
-
-
-import org.openqa.selenium.By;
-
-
-
 import static com.nttdata.core.DriverManager.screenShot;
 
 public class LoginStepsExam {
@@ -23,12 +17,10 @@ public class LoginStepsExam {
     private WebDriver driver;
     private int quantitySelected; // Para almacenar la cantidad seleccionada
 
-
     // Constructor
     public LoginStepsExam(WebDriver driver) {
         this.driver = driver;
         this.quantitySelected = 1; // Inicialmente, siempre es 1
-
     }
 
     public int getQuantitySelected() {
@@ -38,62 +30,55 @@ public class LoginStepsExam {
     public void login(String email, String password) {
         // Ingresar el email
         driver.findElement(LoginPageExam.emailInput).sendKeys(email);
+        screenShot(); // Captura de pantalla después de ingresar el email
 
         // Ingresar la contraseña
         driver.findElement(LoginPageExam.passwordInput).sendKeys(password);
+        screenShot(); // Captura de pantalla después de ingresar la contraseña
 
         // Hacer clic en el botón de inicio de sesión
         driver.findElement(LoginPageExam.loginButton).click();
-
-        // Tomar una captura de pantalla
-        screenShot();
-    }
-
-    public boolean isWelcomeMessageDisplayed() {
-        // Implementa la lógica para verificar el mensaje de bienvenida
-        // Asegúrate de que el mensaje de bienvenida esté visible
-        // Por ejemplo:
-        // return driver.findElement(By.id("welcome-message")).isDisplayed();
-        return true; // Placeholder
+        screenShot(); // Captura de pantalla después de hacer clic en el botón
     }
 
     public void navigateToCategoryAndSubcategory() {
         WebElement categoryElement = driver.findElement(LoginPageExam.clothesCategory);
         categoryElement.click();
+        screenShot(); // Captura de pantalla después de seleccionar la categoría
+
         WebElement subcategoryElement = driver.findElement(LoginPageExam.menSubcategory);
         subcategoryElement.click();
-        screenShot();
-
+        screenShot(); // Captura de pantalla después de seleccionar la subcategoría
     }
 
     public void selectFirstProduct() {
         WebElement firstProductElement = driver.findElement(LoginPageExam.firstProduct);
         firstProductElement.click();
-        screenShot();
-
+        screenShot(); // Captura de pantalla después de seleccionar el primer producto
     }
-
 
     public void setQuantity(int quantity) {
         WebElement quantityInputElement = driver.findElement(LoginPageExam.quantityInput);
         try {
             quantityInputElement.clear();
+            screenShot(); // Captura de pantalla después de borrar el campo de cantidad
             Thread.sleep(500);
             if (!quantityInputElement.getAttribute("value").isEmpty()) {
                 quantityInputElement.clear();
+                screenShot(); // Captura de pantalla después de borrar el campo de cantidad
             }
             quantityInputElement.sendKeys(String.valueOf(quantity));
+            screenShot(); // Captura de pantalla después de ingresar la nueva cantidad
         } catch (InterruptedException e) {
             e.printStackTrace();
             Thread.currentThread().interrupt();
         }
-        screenShot();
     }
 
     public void addProductToCart() {
         WebElement addToCartButtonElement = driver.findElement(LoginPageExam.addToCartButton);
         addToCartButtonElement.click();
-        screenShot();
+        screenShot(); // Captura de pantalla después de agregar el producto al carrito
     }
 
     public boolean isProductAddedConfirmationDisplayed() {
@@ -102,9 +87,12 @@ public class LoginStepsExam {
             WebElement confirmationPopup = wait.until(
                     ExpectedConditions.visibilityOfElementLocated(LoginPageExam.confirmationPopup)
             );
-            return confirmationPopup.isDisplayed();
+            boolean isDisplayed = confirmationPopup.isDisplayed();
+            screenShot(); // Captura de pantalla después de verificar la confirmación
+            return isDisplayed;
         } catch (NoSuchElementException e) {
             // El elemento no se encontró
+            e.printStackTrace();
             return false;
         } catch (Exception e) {
             // Captura cualquier otra excepción
@@ -131,19 +119,19 @@ public class LoginStepsExam {
             double expectedTotalAmount = productPrice.doubleValue() * quantity;
 
             // Comparar el monto total calculado con el monto total del popup
-            return Math.abs(expectedTotalAmount - totalAmount.doubleValue()) < 0.01; // Tolerancia para errores de redondeo
+            boolean isCorrect = Math.abs(expectedTotalAmount - totalAmount.doubleValue()) < 0.01; // Tolerancia para errores de redondeo
+            screenShot(); // Captura de pantalla después de verificar el monto total
+            return isCorrect;
         } catch (ParseException e) {
             e.printStackTrace();
             return false;
         }
     }
 
-
-
     public void finalizarCompra() {
         WebElement finalizarCompraButton = driver.findElement(LoginPageExam.finalizarCompraButton);
         finalizarCompraButton.click();
-        screenShot();
+        screenShot(); // Captura de pantalla después de hacer clic en finalizar compra
     }
 
     public boolean validarTituloCarrito() {
@@ -153,7 +141,9 @@ public class LoginStepsExam {
                     ExpectedConditions.visibilityOfElementLocated(LoginPageExam.carritoPageTitle)
             );
             String pageTitle = carritoTitleElement.getText();
-            return pageTitle.equalsIgnoreCase("CARRITO");
+            boolean isCorrect = pageTitle.equalsIgnoreCase("CARRITO");
+            screenShot(); // Captura de pantalla después de verificar el título del carrito
+            return isCorrect;
         } catch (NoSuchElementException e) {
             e.printStackTrace();
             return false;
@@ -164,11 +154,11 @@ public class LoginStepsExam {
         WebElement increaseQuantityButtonElement = driver.findElement(LoginPageExam.increaseQuantityButton);
         for (int i = 0; i < clicks; i++) {
             increaseQuantityButtonElement.click();
+            screenShot(); // Captura de pantalla después de cada clic en aumentar cantidad
         }
         this.quantitySelected = clicks + 1;
-        screenShot();
+        screenShot(); // Captura de pantalla después de aumentar la cantidad
     }
-
 
     public boolean isTotalAmountCorrect(int quantity) {
         try {
@@ -189,11 +179,12 @@ public class LoginStepsExam {
             double expectedTotalAmount = productPrice.doubleValue() * quantity;
 
             // Comparar el monto total calculado con el monto total del carrito
-            return Math.abs(expectedTotalAmount - totalAmount.doubleValue()) < 0.01; // Tolerancia para errores de redondeo
+            boolean isCorrect = Math.abs(expectedTotalAmount - totalAmount.doubleValue()) < 0.01; // Tolerancia para errores de redondeo
+            screenShot(); // Captura de pantalla después de verificar el monto total
+            return isCorrect;
         } catch (ParseException e) {
             e.printStackTrace();
             return false;
         }
     }
-
 }

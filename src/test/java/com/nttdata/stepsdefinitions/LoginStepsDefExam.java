@@ -28,12 +28,7 @@ public class LoginStepsDefExam {
         loginSteps.login(email, password);
     }
 
-    @Entonces("debería ver la página de inicio con un mensaje de bienvenida")
-    public void deberíaVerLaPáginaDeInicioConUnMensajeDeBienvenida() {
-        boolean isWelcomeMessageDisplayed = loginSteps.isWelcomeMessageDisplayed();
-        // Verificar que el mensaje de bienvenida esté presente
-        Assertions.assertTrue(isWelcomeMessageDisplayed, "El mensaje de bienvenida no está visible.");
-    }
+
 
     @Cuando("navego a la categoria {string} y subcategoria {string}")
     public void navegoALaCategoriaYSubcategoria(String categoria, String subcategoria) {
